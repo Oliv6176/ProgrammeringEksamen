@@ -1,0 +1,79 @@
+body {
+    background: darksalmon;
+}
+  
+.fill {
+    background-color: cyan;
+    position: relative;
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    border: 0;
+}
+  
+.empty {
+    height: 100px;
+    width: 100px;
+    margin: 0px;
+    border: solid 1.5px black;
+    text-align: center;
+    font-size: 0;
+  }
+  
+  .hovered {
+    background-color: darkred;
+  }
+
+  
+
+  .menu {
+      background-color: black;
+      position: absolute;
+      width: 150px;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: 10px;
+      padding: 0;
+      border-radius: 20px;
+      overflow-y: scroll;
+      z-index: 10;
+  }
+  .item {
+      height: 100px;
+      width: 100px;
+      margin: 15px;
+      z-index: 1;
+  }
+  .element {
+      margin:auto;
+      margin-top: 0;
+      position: absolute;
+  }
+
+  .gridbox {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 160px;
+      margin:10px;
+      background-color: brown;
+      overflow:hidden;
+
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+}
+  .container {
+      height: 100px;
+      width:100px;
+      background-color: cyan;
+      z-index: 0;
+      overflow: hidden;
+  }
+  .container.ui-droppable-hover{
+      background-color: cyan;
+      border: solid darkred 2px;
+  }
