@@ -75,37 +75,53 @@
 		<h2>Boards</h2>
 		<?php
 			if (isset($_POST['board-load-btn'])) {
-				$board_id = $_POST["board-load-btn"];
-				header("location: view.php?id=$board_id");
-			}
-			/*if (isset($_POST['boards-leave-btn'])) {
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
-				$boards_id = $_POST["boards-leave-btn"];
+				$board_id = $_POST["board-load-btn"];
 				$user_id = $_SESSION['id'];
 			
-				$sql = "DELETE groups_users FROM groups_users WHERE groups_users.users_id ='$user_id' AND groups_users.groups_id = '$boards_id'";
+				$sql = "SELECT boards.id,boards.owner FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
+				$result = $conn->query($sql);
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_assoc()) {
+						if($row['owner'] === strval($user_id)){
+							$_SESSION['board_id'] = $board_id;
+							header("location: board.php");
+						}else{
+							header("location: view.php?id=$board_id");
+						}
+					}
+				}
+
+				$conn->close();
+			}
+			if (isset($_POST['board-leave-btn'])) {
+				$conn = new mysqli('localhost', 'root', '', 'programmering');
+				$board_id = $_POST["board-leave-btn"];
+				$user_id = $_SESSION['id'];
+			
+				$sql = "DELETE boards_users FROM boards_users WHERE boards_users.users_id ='$user_id' AND boards_users.boards_id = '$board_id'";
 				$conn->query($sql);
 				$conn->close();
 			}
-			if (isset($_POST['group-delete-btn'])) {
-				$conn = new mysqli('localhost', 'root', '', 'teknikfag');
-				$group_id = $_POST["group-delete-btn"];
+			if (isset($_POST['board-delete-btn'])) {
+				$conn = new mysqli('localhost', 'root', '', 'programmering');
+				$board_id = $_POST["board-delete-btn"];
 				$user_id = $_SESSION['id'];
 		
-				$sql = "DELETE groups.*,groups_users.* from groups_users INNER JOIN groups ON groups.id = groups_users.groups_id WHERE groups_users.groups_id = '$group_id' AND groups.owner = '$user_id'";
+				$sql = "DELETE boards.*,boards_users.* from boards_users INNER JOIN boards ON boards.id = boards_users.boards_id WHERE boards_users.boards_id = '$board_id' AND boards.owner = '$user_id'";
 				$conn->query($sql);
 				$conn->close();
-			}*/
+			}
 
 			$conn = new mysqli('localhost', 'root', '', 'programmering');
 			$user_id = $_SESSION['id'];
 		
-			$sql = "SELECT groups.id,groups.owner,groups.name FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
+			$sql = "SELECT boards.id,boards.owner,boards.name FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
 			$result = $conn->query($sql);
 
 			if ($result->num_rows > 0) {
 				while($row = $result->fetch_assoc()) {
-					echo '<form action="menu.php" method="post"><button id="board-load" type="submit" value="'. $row["id"] .'" name="group-load-btn">'.$row["name"].'</button></form>';
+					echo '<form action="menu.php" method="post"><button id="board-load" type="submit" value="'. $row["id"] .'" name="board-load-btn">'.$row["name"].'</button></form>';
 					if($row['owner'] === strval($user_id)){
 						echo '<form action="menu.php" method="post"><button id="board-delete" onclick="return confirm(\'Are you sure you want to delete '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-delete-btn">Delete</button></form>';
 					}else{

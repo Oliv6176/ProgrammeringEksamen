@@ -1,3 +1,9 @@
+<?php
+	session_start();
+	if (empty($_SESSION['id'])) {
+		header('location: login.php');
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +20,6 @@
                 const urlParams = new URLSearchParams(queryString);
                 const id = urlParams.get('id')
                 $.post( "getboard.php", { id: id }).done(function( data ) {
-                    //i = data.replace('ondrop="drop(event)"','');
-                    //i.replace('ondrop="drop(event)"','');
                     $('.grid').html(data);
                 });
             }, 1000);

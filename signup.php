@@ -11,11 +11,13 @@
     $conn = new mysqli('localhost', 'root', '', 'programmering');
 
     if (isset($_POST['signup-btn'])) {
+        $username = mysqli_real_escape_string($conn, $_POST['username']); //Brugernavn
+
         if (isset($_POST['password']) && $_POST['password'] !== $_POST['passwordConf']) {
             echo "<script type='text/javascript'>alert('Passwords do not match');</script>";
         }
         else{
-            $username = $_POST['username'];
+
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Krypter adgangskoden
 
             // check om der allerede er en bruger med samme brugernavn
