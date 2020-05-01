@@ -1,8 +1,11 @@
 <?php
-	session_start();
-	if (empty($_SESSION['id'])) {
-		header('location: login.php');
-	}
+	//Start en session til oprettelse af session variabler
+    session_start();
+
+    //Send til menuen, hvis en bruger allerede er logget ind. 
+    if (empty($_SESSION['id'])) {
+        header('location: login.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,58 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
-    <style>
-		* {
-			box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-		}
-
-		body {
-			margin: 0;
-		}
-		.header{
-			padding: 0 20px;
-		}
-    	.topnav {
-        	overflow: hidden;
-        	background-color: #333;
-      	}
-    	.topnav a{
-        	float:right;
-			display: block;
-			color: #f2f2f2;
-			text-align: center;
-			padding: 14px 16px;
-			text-decoration: none;
-      	}
-    	.footer {
-        	background-color: #f1f1f1;
-			padding: 10px;
-			text-align: center;
-		}
-	
-		.column {
-			float: left;
-			padding: 10px;
-			text-align: center;
-		}
-
-		.column {
-			width: 25%;
-		}
-
-		.row:after {
-		content: "";
-		display: table;
-		clear: both;
-		}
-
-		@media screen and (max-width: 600px) {
-		.column {
-			width: 100%;
-		}
-		}
-    </style>
+    
 </head>
 <body>
 	<div class="header">
@@ -76,36 +28,41 @@
 		<?php
 			if (isset($_POST['board-load-btn'])) {
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
-				$board_id = $_POST["board-load-btn"];
+
+				$board_id = mysqli_real_escape_string($conn, $_POST["board-load-btn"]);
 				$user_id = $_SESSION['id'];
 			
 				$sql = "SELECT boards.id,boards.owner FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
 				$result = $conn->query($sql);
-				if ($result->num_rows > 0) {
-					while($row = $result->fetch_assoc()) {
-						if($row['owner'] === strval($user_id)){
+
+				if($result){
+					if ($result->num_rows > 0) {
+						while($row = $result->fetch_assoc()) {
 							$_SESSION['board_id'] = $board_id;
-							header("location: board.php");
-						}else{
-							header("location: view.php?id=$board_id");
+							$conn->close();
+							header("location: ../board.php");
+							exit(0);
 						}
 					}
 				}
-
 				$conn->close();
 			}
+
 			if (isset($_POST['board-leave-btn'])) {
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
-				$board_id = $_POST["board-leave-btn"];
+				
+				$board_id = mysqli_real_escape_string($conn, $_POST["board-leave-btn"]);
 				$user_id = $_SESSION['id'];
 			
 				$sql = "DELETE boards_users FROM boards_users WHERE boards_users.users_id ='$user_id' AND boards_users.boards_id = '$board_id'";
 				$conn->query($sql);
 				$conn->close();
 			}
+
 			if (isset($_POST['board-delete-btn'])) {
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
-				$board_id = $_POST["board-delete-btn"];
+				
+				$board_id = mysqli_real_escape_string($conn, $_POST["board-delete-btn"]);
 				$user_id = $_SESSION['id'];
 		
 				$sql = "DELETE boards.*,boards_users.* from boards_users INNER JOIN boards ON boards.id = boards_users.boards_id WHERE boards_users.boards_id = '$board_id' AND boards.owner = '$user_id'";
@@ -118,6 +75,7 @@
 		
 			$sql = "SELECT boards.id,boards.owner,boards.name FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
 			$result = $conn->query($sql);
+
 			if($result){
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
@@ -135,25 +93,31 @@
 	</div>
 
 	<div class="column">
-		<h2>New Group</h2>
+		<h2>New board</h2>
 		<form action="menu.php" method="post">
-			<input type="text" required="required" name="group-name" placeholder="Group Name">
-			<button id="group-create" type="submit" name="group-create-btn">Create new group</button>
+			<input type="text" required="required" name="board-name" placeholder="Board Name">
+			<button id="board-create" type="submit" name="board-create-btn">Create new board</button>
 			<?php
-				if (isset($_POST['group-create-btn'])) {
-					$conn = new mysqli('localhost', 'root', '', 'teknikfag');
-					$group_name = $_POST["group-name"];
-					$user_id = $_SESSION['id'];
-			
-					$sql = "INSERT INTO groups (name,owner) VALUES ('$group_name','$user_id')";
-					$conn->query($sql);		
-					$group_id = $conn->insert_id;
+				if(isset($_POST['board-create-btn'])) {
+					$conn = new mysqli('localhost', 'root', '', 'programmering');
 					
-					$sql = "INSERT INTO groups_users (users_id,groups_id) VALUES ('$user_id','$group_id')";
-					$conn->query($sql);
-						
+					$board_name = mysqli_real_escape_string($conn, $_POST["board-name"]);
+					$user_id = $_SESSION['id'];
+
+					$sql = "INSERT INTO boards (name,owner) VALUES ('$board_name', '$user_id')";
+					$result = $conn->query($sql);
+
+					$board_id = $conn->insert_id;
+					$sql = "INSERT INTO boards_users (users_id,boards_id) VALUES ('$user_id', '$board_id')";
+					$result = $conn->query($sql);
+
 					$conn->close();
-					header("location: group.php?id=$group_id");
+
+					//Opretter session variabler til spillebræts id
+					$_SESSION['board_id'] = $board_id;
+					
+					//Viderstiller til board.php
+					header('location: ../board.php');
 					exit(0);
 				}
 			?>

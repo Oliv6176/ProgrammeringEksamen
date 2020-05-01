@@ -26,54 +26,245 @@ body {
 
   
 
-  .menu {
-      background-color: black;
-      position: absolute;
-      width: 150px;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      margin: 10px;
-      padding: 0;
-      border-radius: 20px;
-      overflow-y: scroll;
-      z-index: 10;
-  }
-  .item {
-      height: 100px;
-      width: 100px;
-      margin: 15px;
-      z-index: 1;
-  }
-  .element {
-      margin:auto;
-      margin-top: 0;
-      position: absolute;
-  }
 
-  .gridbox {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 160px;
-      margin:10px;
-      background-color: brown;
-      overflow:hidden;
-
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: 100px 100px 100px;
+  * {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
-  .container {
-      height: 100px;
-      width:100px;
-      background-color: cyan;
-      z-index: 0;
-      overflow: hidden;
+body {
+    margin: 0;
+    background-color: darkslategrey;
+}
+form {
+    background-color: lightskyblue;
+    position: absolute;
+    right: 20%;
+    left: 20%;
+    top:25%;
+    bottom: 25%;
+    padding: 25px;
+    border-radius: 25px;
+}
+.box {
+    float:none;
+    height: 20%;
+}
+.box label {
+    color:white;
+    font-size: 2em;
+}
+.box input{
+    background-color: slategray;
+    border:2px solid darkslategray;
+    width: 100%;
+    height: 40px;
+    color: white;
+    padding: 0px 6px;
+    font-size: 1.4em;
+}
+#signup {
+    height:40px;
+    width: 100%;
+    text-align:center;
+    background-color: #4CAF50;
+    border:2px solid darkslategray;
+    color: white;
+    font-size:1.5em;
+}
+#signin{
+    bottom: 0;
+    color:white;
+    font-size: 1.5em;
+}
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: darkslategrey;
+}
+form {
+    background-color: lightskyblue;
+    position: absolute;
+    right: 20%;
+    left: 20%;
+    top:25%;
+    bottom: 25%;
+    padding: 25px;
+    border-radius: 25px;
+}
+.box {
+    float:none;
+    height: 30%;
+}
+.box label {
+    color:white;
+    font-size: 2em;
+}
+.box input{
+    background-color: slategray;
+    border:2px solid darkslategray;
+    width: 100%;
+    height: 40px;
+    color: white;
+    font-size: 1.4em;
+    padding: 0px 6px;
+}
+#signup {
+    height:40px;
+    width: 100%;
+    text-align:center;
+    background-color: #4CAF50;
+    border:2px solid darkslategray;
+    color: white;
+    font-size:1.5em;
+}
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+.header{
+    padding: 0 20px;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #333;
   }
-  .container.ui-droppable-hover{
-      background-color: cyan;
-      border: solid darkred 2px;
+.topnav a{
+    float:right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
   }
+.footer {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+}
+
+.column {
+    float: left;
+    padding: 10px;
+    text-align: center;
+}
+
+.column {
+    width: 25%;
+}
+
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+
+@media screen and (max-width: 600px) {
+.column {
+    width: 100%;
+}
+}
+
+
+.boardMenu{
+    position:absolute;
+    background-color: #4CAF50;
+}
+
+form.boardMenu {
+    width:150px;
+    height:100px;
+    left:10px;
+    bottom:10px;
+    top:auto;
+    padding: 8px;
+    text-align: center;
+}
+
+div.boardMenu {
+    width: 150px;
+    top: 0;
+    bottom: 110px;
+    left: 0;
+    margin: 10px;
+    padding: 0;
+    border-radius: 20px;
+    overflow-y: scroll;
+    z-index: 10;
+}
+
+img.boardMenu{
+    width:50px;
+    height:50px;
+    right:10px;
+    bottom:20px;
+    background-color: transparent;
+}
+
+#select-image-input{
+    width:140px;
+    margin-top: 10px;
+}
+
+#select-image-submit{
+    bottom: 10px;
+    width: 100px;
+    transform: translate(-50px);
+    top: auto;
+    position: absolute;
+}
+
+.item {
+    height: 100px;
+    width: 100px;
+    margin: 15px;
+    z-index: 1;
+}
+
+.element {
+    margin:auto;
+    margin-top: 0;
+    position: absolute;
+}
+
+.gridbox {
+    position: absolute;
+    top: 105px;
+    right: 10px;
+    bottom: 10px;
+    left: 170px;
+    margin:0px;
+    background-color: #4CAF50;
+    overflow:hidden;
+
+}
+.grid {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+}
+.container {
+    height: 100px;
+    width:100px;
+    background-color: cyan;
+    z-index: 0;
+    overflow: hidden;
+}
+.container.ui-droppable-hover{
+    background-color: cyan;
+    border: solid darkred 2px;
+}
+.gridMenu{
+    background-color: #4CAF50;
+    position: absolute;
+    top:10px;
+    right:10px;
+    left:170px;
+    height: 85px;
+}

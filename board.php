@@ -1,22 +1,22 @@
 <?php
 	session_start();
 	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
-		header('location: login.php');
+		header('location: ../ProgrammeringEksamen/usermanagement/login.php');
     }
     $conn = new mysqli('localhost', 'root', '', 'programmering');
     $user_id = $_SESSION['id'];
     $board_id = $_SESSION['board_id'];
-    $body="";
 
-    $sql = "SELECT boards.id,boards.owner,boards.body FROM boards WHERE owner ='$user_id' AND id = '$board_id'";
+    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body,boards.width FROM boards WHERE owner ='$user_id' AND id = '$board_id'";
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
 			if($row['owner'] === strval($user_id)){
                 $body = $row["body"];
+                $name = $row["name"];
             }
             else {
-                header('location: signout.php');
+                header('location: ../ProgrammeringEksamen/usermanagement/signout.php');
             }
 		}
     }
@@ -39,7 +39,7 @@
             }
             $conn->close(); 
         }
-    }		
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,29 +64,28 @@
             var data = ev.dataTransfer.getData("text/plain");
             var object = document.getElementById(data);
             if(object != null){
-            if(object.getAttribute("clone") == "yes"){
-                var clone = object.cloneNode(true);
-                var id = Date.now();
-                clone.setAttribute("id",id);
-                clone.setAttribute("clone","no");
-                clone.setAttribute("class","item element");
-                
-                var z = parseInt(ev.target.style.zIndex);
-                z = z + 1;
-                console.log(z);
-                clone.style.zIndex = z;
-    
-                
+                if(object.getAttribute("clone") == "yes"){
+                    var clone = object.cloneNode(true);
+                    var id = Date.now();
+                    clone.setAttribute("id",id);
+                    clone.setAttribute("clone","no");
+                    clone.setAttribute("class","item element");
+                    
+                    var z = parseInt(ev.target.style.zIndex);
+                    z = z + 1;
+                    clone.style.zIndex = z;
 
-                ev.target.appendChild(clone);
-            }else if (ev.target != document.getElementById(data)){
-                var z = parseInt(ev.target.style.zIndex);
-                z = z + 1;
-                document.getElementById(data).style.zIndex = z;
-                ev.target.appendChild(document.getElementById(data));
-            }}
+                    ev.target.appendChild(clone);
+                    
+                }else if (ev.target != document.getElementById(data)){
+                    var z = parseInt(ev.target.style.zIndex);
+                    z = z + 1;
+                    document.getElementById(data).style.zIndex = z;
+                    ev.target.appendChild(document.getElementById(data));
+                }
+            }
             ev.dataTransfer.clearData();
-        }
+        }   
 
         function remove(ev) {
             ev.preventDefault();
@@ -98,13 +97,114 @@
             ev.dataTransfer.clearData();
         }
         
+        function topHandler(side) {
+  
+            var n = document.getElementsByClassName('row');
+            
+            for(i=0; i< n.length; i++){
+                if(side == 1){
+                    clone = n[i].children[0].cloneNode(true);
+                    clone.id = Date.now();
+                    clone.innerHTML = "";
+                    n[i].insertBefore(clone,n[i].children[0]);
+                }else if (side == -1){
+                    if(n[i].childElementCount > 1){
+                        n[i].removeChild(n[i].children[0]);
+                    }
+                }
+            }
+        }
+
+        function bottomHandler(side) {
+            
+            var n = document.getElementsByClassName('row');
+            
+            for(i=0; i< n.length; i++){
+                if(side == 1){
+                    clone = n[i].children[n[i].children.length-1].cloneNode(true);
+                    clone.id = Date.now();
+                    clone.innerHTML = "";
+                    n[i].appendChild(clone);
+                }else if (side == -1){
+                    if(n[i].childElementCount > 1){
+                        n[i].removeChild(n[i].lastChild);
+                    }
+                }
+            }
+        }
+
+        function rightHandler(side) {
+            var n = document.getElementsByClassName('grid');
+            for(i=0; i< n.length; i++){
+                if(side == 1){
+                    clone = n[i].children[n[i].children.length-1].cloneNode(true);
+                    clone.id = Date.now();
+       
+                    for(m=0; m< clone.childElementCount; m++){
+                        clone.children[m].id = Date.now();
+                        clone.children[m].innerHTML = "";
+                    }
+                    n[i].appendChild(clone);
+
+                }else if (side == -1){
+                    if(n[i].childElementCount > 1){
+                        n[i].removeChild(n[i].lastChild);
+                    }
+                }
+                var width = n[i].childElementCount;
+                var s = "";
+                for(i=0;i<width;i++){
+                    s = s + "100px "; 
+                }
+                document.getElementsByClassName('grid')[0].style.gridTemplateColumns = s;
+            }
+        }
+
+        function leftHandler(side) {
+            var n = document.getElementsByClassName('grid');
+            for(i=0; i< n.length; i++){
+                if(side == 1){
+                    clone = n[i].children[0].cloneNode(true);
+                    clone.id = Date.now();
+       
+                    for(m=0; m< clone.childElementCount; m++){
+                        clone.children[m].id = Date.now();
+                        clone.children[m].innerHTML = "";
+                    }
+                    n[i].insertBefore(clone,n[i].children[0]);
+                }else if (side == -1){
+                    if(n[i].childElementCount > 1){
+                        n[i].removeChild(n[i].children[0]);
+                    }
+                }
+                var width = n[i].childElementCount;
+                var s = "";
+                for(i=0;i<width;i++){
+                    s = s + "100px "; 
+                }
+           
+                document.getElementsByClassName('grid')[0].style.gridTemplateColumns = s;
+            }
+        }
+
+        function back(){
+            window.location.href = 'usermanagement/menu.php';
+        }
+
+        
 
         $(document).ready(function() {
-
+            var width = document.getElementsByClassName('grid')[0].childElementCount;
+            var s = "";
+            for(i=0;i<width;i++){
+                s = s + "100px "; 
+            }
+            document.getElementsByClassName('grid')[0].style.gridTemplateColumns = s;
+            s="";
+        
             $(document).keydown(function (e){
                 if(e.keyCode == 16){
                     $( "#draggable" ).draggable();
-                    console.log("geheh");
                 }
                 
             });
@@ -115,49 +215,73 @@
             });
 
             setInterval(function() {
-                var jsId = '<?php echo $_SESSION['id']; ?>'
-                var jsBody = $('.grid').html()
-
-                $.post( "updateboard.php", { body: jsBody})
-                
+                var jsBody = $('.grid').html();
+                var jsWidth = width;
+ 
+                $.post('updateboard.php', { body: jsBody, width: jsWidth }, function(data){
+                    //console.log(data);
+                });
             }, 1000);
         });
     </script>
 </head>
 <body>
+    <button onclick="back()">Back</button>  
 
-<form action="board.php" method="post" enctype="multipart/form-data">
-    <label>Select Image File:</label>
-    <input type="file" name="image">
-    <input type="submit" name="submit" value="Upload">
-</form>
-<div class="menu">
-<?php
-    $conn = new mysqli('localhost', 'root', '', 'programmering');    
-    $query = "SELECT * FROM images";
-    $result = $conn->query($query);
-    if($result){
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('data:image/jpg;charset=utf8;base64,".base64_encode($row['img'])."')" .';background-size: contain;"></div>';
+    <div class="boardMenu">
+        <?php
+            $conn = new mysqli('localhost', 'root', '', 'programmering');    
+            $query = "SELECT * FROM images";
+            $result = $conn->query($query);
+            if($result){
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('data:image/jpg;charset=utf8;base64,".base64_encode($row['img'])."')" .';background-size: contain;"></div>';
+                    }
+                }
             }
-        }
-    }
-
-    $conn->close();
-?>
+            $conn->close();
+        ?>
    </div>  
     
-   <div class="gridbox">
-        <div class="grid" id="draggable">
+    <div class="gridMenu">
+        <h1 style="margin:0;margin-left:20px;margin-top:10px;"><?php echo $name ?></h1>
+        <div style="display: flex; justify-content: space-between;">
+            <div style="text-align:center;float:left;margin:10px;">
+                <button onclick="topHandler(-1)">-</button>    
+                <label>Top</label>
+                <button onclick="topHandler(1)">+</button>
+            </div>
+            <div style="text-align:center;float:left;margin:10px;">
+                <button onclick="bottomHandler(-1)">-</button>    
+                <label>Bottom</label>
+                <button onclick="bottomHandler(1)">+</button>
+            </div>
+            <div style="text-align:center;float:left;margin:10px;">
+                <button onclick="rightHandler(-1)">-</button>    
+                <label>Right</label>
+                <button onclick="rightHandler(1)">+</button>
+            </div>
+            <div style="text-align:center;float:left;margin:10px;">
+                <button onclick="leftHandler(-1)">-</button>    
+                <label>Left</label>
+                <button onclick="leftHandler(1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="gridbox">
+        <div class="grid" style="display: grid;grid-template-columns: 100px;" id="draggable">
             <?php echo $body;?>
         </div>
     </div>
 
+    <form class="boardMenu" action="board.php" method="post" enctype="multipart/form-data">
+        <label id="select-image-label">Select Image File:</label>
+        <input id="select-image-input" type="file" name="file">
+        <input id="select-image-submit" type="submit" name="submit" value="Upload">
+    </form>
 
-
-    <img ondrop="remove(event)" ondragover="allowDrop(event)" src="bin.png" alt="bin" style="width:50px;height:50px;position:absolute;right:0px;bottom:10px;">
-    
-    
+    <img class="boardMenu" ondrop="remove(event)" ondragover="allowDrop(event)" src="bin.png" alt="bin">
 </body>
 </html>
