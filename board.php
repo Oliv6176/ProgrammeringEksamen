@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if (empty($_SESSION['id'])) {
+	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
 		header('location: login.php');
     }
     $conn = new mysqli('localhost', 'root', '', 'programmering');
@@ -36,27 +36,9 @@
             
                 $query = "INSERT INTO images (img) values ('$imgContent')";
                 $result = $conn->query($query);
-                echo("Error description: " . $conn -> error);
-            
-                if($result){ 
-                    $statusMsg = "File uploaded successfully."; 
-                }
-                else{ 
-                    $statusMsg = "File upload failed, please try again."; 
-                }  
-            }
-            else{ 
-                $statusMsg = 'Sorry, only JPG, JPEG, PNG, & GIF files are allowed to upload.'; 
             }
             $conn->close(); 
         }
-        else{ 
-            $statusMsg = 'Please select an image file to upload.'; 
-        } 
-
-        echo $statusMsg; 
-        
-   
     }		
 ?>
 <!DOCTYPE html>
@@ -67,6 +49,7 @@
     <title>Board</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         function allowDrop(ev) {
             ev.preventDefault();
@@ -121,6 +104,7 @@
             $(document).keydown(function (e){
                 if(e.keyCode == 16){
                     $( "#draggable" ).draggable();
+                    console.log("geheh");
                 }
                 
             });
@@ -131,11 +115,10 @@
             });
 
             setInterval(function() {
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                const id = urlParams.get('id')
-                const body = $('.grid').html()
-                $.post( "updateboard.php", { id: id , body: body})
+                var jsId = '<?php echo $_SESSION['id']; ?>'
+                var jsBody = $('.grid').html()
+
+                $.post( "updateboard.php", { body: jsBody})
                 
             }, 1000);
         });
@@ -148,19 +131,31 @@
     <input type="file" name="image">
     <input type="submit" name="submit" value="Upload">
 </form>
+<div class="menu">
 <?php
     $conn = new mysqli('localhost', 'root', '', 'programmering');    
     $query = "SELECT * FROM images";
     $result = $conn->query($query);
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "<img src='".$row['img']."' >";
+    if($result){
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('data:image/jpg;charset=utf8;base64,".base64_encode($row['img'])."')" .';background-size: contain;"></div>';
+            }
         }
     }
+
     $conn->close();
 ?>
+   </div>  
     
-    
+   <div class="gridbox">
+        <div class="grid" id="draggable">
+            <?php echo $body;?>
+        </div>
+    </div>
+
+
+
     <img ondrop="remove(event)" ondragover="allowDrop(event)" src="bin.png" alt="bin" style="width:50px;height:50px;position:absolute;right:0px;bottom:10px;">
     
     

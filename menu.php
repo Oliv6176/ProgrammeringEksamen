@@ -118,14 +118,15 @@
 		
 			$sql = "SELECT boards.id,boards.owner,boards.name FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
 			$result = $conn->query($sql);
-
-			if ($result->num_rows > 0) {
-				while($row = $result->fetch_assoc()) {
-					echo '<form action="menu.php" method="post"><button id="board-load" type="submit" value="'. $row["id"] .'" name="board-load-btn">'.$row["name"].'</button></form>';
-					if($row['owner'] === strval($user_id)){
-						echo '<form action="menu.php" method="post"><button id="board-delete" onclick="return confirm(\'Are you sure you want to delete '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-delete-btn">Delete</button></form>';
-					}else{
-						echo '<form action="menu.php" method="post"><button id="board-leave" onclick="return confirm(\'Are you sure you want to leave '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-leave-btn">Leave</button></form>';
+			if($result){
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_assoc()) {
+						echo '<form action="menu.php" method="post"><button id="board-load" type="submit" value="'. $row["id"] .'" name="board-load-btn">'.$row["name"].'</button></form>';
+						if($row['owner'] === strval($user_id)){
+							echo '<form action="menu.php" method="post"><button id="board-delete" onclick="return confirm(\'Are you sure you want to delete '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-delete-btn">Delete</button></form>';
+						}else{
+							echo '<form action="menu.php" method="post"><button id="board-leave" onclick="return confirm(\'Are you sure you want to leave '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-leave-btn">Leave</button></form>';
+						}
 					}
 				}
 			}
