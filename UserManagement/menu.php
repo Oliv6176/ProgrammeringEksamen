@@ -12,7 +12,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+	<title>Menu</title>
+	<link rel="stylesheet" href="../style.css">
     
 </head>
 <body>
@@ -79,12 +80,13 @@
 			if($result){
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
-						echo '<form action="menu.php" method="post"><button id="board-load" type="submit" value="'. $row["id"] .'" name="board-load-btn">'.$row["name"].'</button></form>';
+						echo '<form action="menu.php" class="boardform" method="post"><button class="boardsbutton" id="board-load" type="submit" value="'. $row["id"] .'" name="board-load-btn">'.$row["name"].'</button></form>';
 						if($row['owner'] === strval($user_id)){
-							echo '<form action="menu.php" method="post"><button id="board-delete" onclick="return confirm(\'Are you sure you want to delete '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-delete-btn">Delete</button></form>';
+							echo '<form action="menu.php" class="boardform" method="post"><button class="boardsbutton" id="board-delete" onclick="return confirm(\'Are you sure you want to delete '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-delete-btn">Delete</button></form>';
 						}else{
-							echo '<form action="menu.php" method="post"><button id="board-leave" onclick="return confirm(\'Are you sure you want to leave '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-leave-btn">Leave</button></form>';
+							echo '<form action="menu.php" class="boardform" method="post"><button class="boardsbutton" id="board-leave" onclick="return confirm(\'Are you sure you want to leave '.$row["name"].'?\');" type="submit" value="'. $row["id"] .'" name="board-leave-btn">Leave</button></form>';
 						}
+						echo("<br>");
 					}
 				}
 			}

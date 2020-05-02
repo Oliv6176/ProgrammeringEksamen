@@ -7,37 +7,40 @@
     $user_id = $_SESSION['id'];
     $board_id = $_SESSION['board_id'];
 
-    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body,boards.width FROM boards WHERE owner ='$user_id' AND id = '$board_id'";
+    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body,boards.width FROM boards WHERE id = '$board_id'";
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			if($row['owner'] === strval($user_id)){
-                $body = $row["body"];
-                $name = $row["name"];
-            }
-            else {
-                header('location: ../ProgrammeringEksamen/usermanagement/signout.php');
-            }
-		}
+            $body = $row["body"];
+            $name = $row["name"];
+        }
     }
+    else {
+        header('location: ../ProgrammeringEksamen/usermanagement/signout.php');
+    }
+    
     $conn->close();
     if(isset($_POST['submit'])){
-        if(!empty($_FILES["image"]["name"])) { 
-            $conn = new mysqli('localhost', 'root', '', 'programmering');
-            
-            $fileName = basename($_FILES["image"]["name"]); 
+        if(!empty($_FILES["file"]["name"])) { 
+            $fileName = basename($_FILES["file"]["name"]); 
             $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
-            
+            echo $fileType;
             $allowTypes = array('jpg','png','jpeg','gif'); 
 
             if( in_array($fileType, $allowTypes )){
-                $image = $_FILES['image']['tmp_name']; 
-                $imgContent = addslashes(file_get_contents($image)); 
-            
-                $query = "INSERT INTO images (img) values ('$imgContent')";
-                $result = $conn->query($query);
+                $targetFilePath = "images/";
+
+                $temp = explode(".", $fileName);
+                $newfilename = uniqid (rand (), true).'.'.end($temp);
+                if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath . $newfilename)){
+
+                    $conn = new mysqli('localhost', 'root', '', 'programmering');
+                    
+                    $query = "INSERT INTO images (img) values ('$targetFilePath$newfilename')";
+                    $result = $conn->query($query);
+                    $conn->close(); 
+                }
             }
-            $conn->close(); 
         }
     }
 ?>
@@ -188,10 +191,22 @@
         }
 
         function back(){
+            update();
             window.location.href = 'usermanagement/menu.php';
         }
 
+        function update(){
+            var jsBody = document.getElementsByClassName('grid')[0].innerHTML;
+            
+            $.post('updateboard.php', { body: jsBody }, function(data){
+                //console.log(data);
+            });
+        }
         
+        function share(){
+            update();
+            window.location.href = 'share.php';
+        }
 
         $(document).ready(function() {
             var width = document.getElementsByClassName('grid')[0].childElementCount;
@@ -215,20 +230,17 @@
             });
 
             setInterval(function() {
-                var jsBody = $('.grid').html();
-                var jsWidth = width;
- 
-                $.post('updateboard.php', { body: jsBody, width: jsWidth }, function(data){
-                    //console.log(data);
-                });
+                update();
             }, 1000);
         });
     </script>
 </head>
 <body>
-    <button onclick="back()">Back</button>  
-
-    <div class="boardMenu">
+    <div class="boardMenu" id="backsave">
+        <button onclick="back()">Back</button>
+        <button onclick="share()">Share</button>    
+    </div>
+    <div class="boardMenu" id="menu">
         <?php
             $conn = new mysqli('localhost', 'root', '', 'programmering');    
             $query = "SELECT * FROM images";
@@ -236,7 +248,7 @@
             if($result){
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                        echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('data:image/jpg;charset=utf8;base64,".base64_encode($row['img'])."')" .';background-size: contain;"></div>';
+                        echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('".$row["img"]."')" .';background-size: contain;"></div>';
                     }
                 }
             }
@@ -282,6 +294,6 @@
         <input id="select-image-submit" type="submit" name="submit" value="Upload">
     </form>
 
-    <img class="boardMenu" ondrop="remove(event)" ondragover="allowDrop(event)" src="bin.png" alt="bin">
+    <img class="boardMenu" ondrop="remove(event)" ondragover="allowDrop(event)" src="images/bin.png" alt="bin">
 </body>
 </html>

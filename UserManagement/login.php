@@ -35,7 +35,7 @@
                         //Lukker databaseforbindelse
                         $conn->close();
 
-                        //Viderstiller ti menuen
+                        //Viderstiller til menuen
                         header('location: menu.php');
                         exit(0);
                     } 
@@ -62,7 +62,7 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <form action="login.php" method="post">
+    <form action="login.php" method="post" class="login">
         <div class="box">
             <label>Username</label>
             <input type="text" required="required" name="username" value="<?php echo $username; ?>">

@@ -1,30 +1,40 @@
 <?php
-session_start();
-if (empty($_SESSION['id'])) {
-	header('location: ../ProgrammeringEksamen/usermanagement/login.php');
-}
-$conn = new mysqli('localhost', 'root', '', 'programmering');
+    //Start en session til oprettelse af session variabler
+    session_start();
+    
+    //Send til log ind siden, hvis en bruger ikke er logget ind. 
+    if (empty($_SESSION['id'])) {
+        header('location: ../ProgrammeringEksamen/usermanagement/login.php');
+    }
+    //Checker om der pliver lavet en POST med body
+    if (isset($_POST["body"])) {
+        //Opret database forbindelse
+        $conn = new mysqli('localhost', 'root', '', 'programmering');
 
-$id = $_SESSION['board_id'];
-$body = $_POST['body'];
-$user_id = $_SESSION['id'];
+        //Hent spilleplade id og bruger id fra session
+        $id = $_SESSION['board_id'];
+        $user_id = $_SESSION['id'];
 
-$sql = "SELECT * FROM boards_users WHERE boards_id='$id' AND users_id ='$user_id'";
-$result = $conn->query($sql);
+        //Hent body fra POST og beskyt mod sql angreb ved, at fjerne speciele tegn og tage højde for serverens charset
+        $body = mysqli_real_escape_string($conn, $_POST['body']);
+        
+        //Find alt fra databasetabellen board_users, hvor brætspils id'et er $id og bruger id'et er $user_id
+        $sql = "SELECT * FROM boards_users WHERE boards_id='$id' AND users_id ='$user_id'";
+        $result = $conn->query($sql);
 
-if($result){
-    if ($result->num_rows > 0) {     
-        while($row = $result->fetch_assoc()) {
-            if($row['users_id'] === $user_id && $row['boards_id'] === $id){
-                $sql = "UPDATE boards SET body = '$body' WHERE id='$id'";
-                $conn->query($sql);
-                exit;
+        if($result){
+            if ($result->num_rows > 0) {     
+                while($row = $result->fetch_assoc()) {
+                    //Updater spillepladen i databasen, hvor id'et er spillepladens id.
+                    $sql = "UPDATE boards SET body = '$body' WHERE id='$id'";
+                    $conn->query($sql);
+                    exit();
+                }
             }else{
                 header("location: ../ProgrammeringEksamen/usermanagement/signout.php");
             }
         }
+        //Luk databaseforbindelse
+        $conn->close();
     }
-}
-$conn->close();
-
-
+?>

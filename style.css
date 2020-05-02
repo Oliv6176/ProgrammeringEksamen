@@ -1,134 +1,14 @@
-body {
-    background: darksalmon;
-}
-  
-.fill {
-    background-color: cyan;
-    position: relative;
-    height: 100px;
-    width: 100px;
-    cursor: pointer;
-    border: 0;
-}
-  
-.empty {
-    height: 100px;
-    width: 100px;
-    margin: 0px;
-    border: solid 1.5px black;
-    text-align: center;
-    font-size: 0;
-  }
-  
-  .hovered {
-    background-color: darkred;
-  }
 
-  
-
-
-  * {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
 body {
     margin: 0;
     background-color: darkslategrey;
-}
-form {
-    background-color: lightskyblue;
-    position: absolute;
-    right: 20%;
-    left: 20%;
-    top:25%;
-    bottom: 25%;
-    padding: 25px;
-    border-radius: 25px;
-}
-.box {
-    float:none;
-    height: 20%;
-}
-.box label {
-    color:white;
-    font-size: 2em;
-}
-.box input{
-    background-color: slategray;
-    border:2px solid darkslategray;
-    width: 100%;
-    height: 40px;
-    color: white;
-    padding: 0px 6px;
-    font-size: 1.4em;
-}
-#signup {
-    height:40px;
-    width: 100%;
-    text-align:center;
-    background-color: #4CAF50;
-    border:2px solid darkslategray;
-    color: white;
-    font-size:1.5em;
 }
 #signin{
     bottom: 0;
     color:white;
     font-size: 1.5em;
 }
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
 
-body {
-    margin: 0;
-    background-color: darkslategrey;
-}
-form {
-    background-color: lightskyblue;
-    position: absolute;
-    right: 20%;
-    left: 20%;
-    top:25%;
-    bottom: 25%;
-    padding: 25px;
-    border-radius: 25px;
-}
-.box {
-    float:none;
-    height: 30%;
-}
-.box label {
-    color:white;
-    font-size: 2em;
-}
-.box input{
-    background-color: slategray;
-    border:2px solid darkslategray;
-    width: 100%;
-    height: 40px;
-    color: white;
-    font-size: 1.4em;
-    padding: 0px 6px;
-}
-#signup {
-    height:40px;
-    width: 100%;
-    text-align:center;
-    background-color: #4CAF50;
-    border:2px solid darkslategray;
-    color: white;
-    font-size:1.5em;
-}
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    margin: 0;
-}
 .header{
     padding: 0 20px;
 }
@@ -157,7 +37,7 @@ body {
 }
 
 .column {
-    width: 25%;
+    width: 50%;
 }
 
 .row:after {
@@ -172,6 +52,83 @@ clear: both;
 }
 }
 
+.boardform{
+    background-color: tomato;
+    border: 2px solid black;
+    width: 100px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.boardsbutton{
+    background-color: tomato;
+
+    color: white;
+    padding: 11px 45px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+}
+button#board-delete {
+    padding: 10px 5px;
+}
+form.boardform {
+    background: transparent;
+    border: 0;
+}
+button#board-load {
+    width: 120px;
+    padding: 10px 5px;
+    overflow: hidden;
+}
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form.login, form.signup {
+    background-color: slategray;
+    position: absolute;
+    right: 20%;
+    left: 20%;
+    top:25%;
+    bottom: 25%;
+    padding: 25px;
+    border-radius: 25px;
+}
+
+.box {
+    float:none;
+    height: 25%;
+}
+.box label {
+    color:white;
+    font-size: 2em;
+}
+.box input{
+    background-color: slategray;
+    border:2px solid darkslategray;
+    width: 100%;
+    height: 40px;
+    color: white;
+    font-size: 1.4em;
+    padding: 0px 6px;
+}
+#signup {
+    height:40px;
+    width: 100%;
+    text-align:center;
+    background-color: #4CAF50;
+    border:2px solid darkslategray;
+    color: white;
+    font-size:1.5em;
+}
+
+h1, h2{
+    color: white;
+}
 
 .boardMenu{
     position:absolute;
@@ -186,14 +143,39 @@ form.boardMenu {
     top:auto;
     padding: 8px;
     text-align: center;
+    border-radius: 20px;
 }
 
-div.boardMenu {
+#backsave.boardMenu{
     width: 150px;
-    top: 0;
-    bottom: 110px;
-    left: 0;
-    margin: 10px;
+    top: 10px;
+    height: 85px;
+    left: 10px;
+    margin: 0px;
+    padding: 0;
+    border-radius: 20px;
+    z-index: 10;
+    overflow: hidden;
+    text-align: center;
+}
+#backsave.boardMenu button{
+    background-color: #4CAF50;
+    border: 0;
+    border-bottom: 2px solid black;
+    color: white;
+    padding: 11px 45px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+}
+
+#menu.boardMenu {
+    width: 150px;
+    top: 105px;
+    bottom: 120px;
+    left: 10px;
+    margin: 0px;
     padding: 0;
     border-radius: 20px;
     overflow-y: scroll;
@@ -243,6 +225,7 @@ img.boardMenu{
     margin:0px;
     background-color: #4CAF50;
     overflow:hidden;
+    border-radius: 20px;
 
 }
 .grid {
@@ -252,12 +235,12 @@ img.boardMenu{
 .container {
     height: 100px;
     width:100px;
-    background-color: cyan;
+    background-color: slategray;
     z-index: 0;
     overflow: hidden;
 }
 .container.ui-droppable-hover{
-    background-color: cyan;
+    background-color: slategray;
     border: solid darkred 2px;
 }
 .gridMenu{
@@ -267,4 +250,5 @@ img.boardMenu{
     right:10px;
     left:170px;
     height: 85px;
+    border-radius: 20px;
 }

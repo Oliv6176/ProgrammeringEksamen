@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <form action="signup.php" method="post">
+    <form action="signup.php" method="post" class="signup">
         <div class="box">
             <label>Username</label>
             <br>
