@@ -14,7 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Menu</title>
 	<link rel="stylesheet" href="../style.css">
-    
 </head>
 <body>
 	<div class="header">
@@ -25,15 +24,20 @@
 	</div>
 
 	<div class="column">
-		<h2>Boards</h2>
+		<h2>Gameboards</h2>
 		<?php
+			//Check om der er blevet klikket på load-knappen
 			if (isset($_POST['board-load-btn'])) {
+				
+				//Start database forbindelse
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
 
+				//Set spillebræts id og bruger id
 				$board_id = mysqli_real_escape_string($conn, $_POST["board-load-btn"]);
 				$user_id = $_SESSION['id'];
 			
-				$sql = "SELECT boards.id,boards.owner FROM boards_users INNER JOIN boards on boards.id = boards_users.boards_id WHERE users_id ='$user_id'";
+				//He
+				$sql = "SELECT * FROM boards_users WHERE users_id ='$user_id'";
 				$result = $conn->query($sql);
 
 				if($result){
@@ -95,7 +99,7 @@
 	</div>
 
 	<div class="column">
-		<h2>New board</h2>
+		<h2>New Gameboard</h2>
 		<form action="menu.php" method="post">
 			<input type="text" required="required" name="board-name" placeholder="Board Name">
 			<button id="board-create" type="submit" name="board-create-btn">Create new board</button>

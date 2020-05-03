@@ -7,7 +7,7 @@
     $user_id = $_SESSION['id'];
     $board_id = $_SESSION['board_id'];
 
-    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body,boards.width FROM boards WHERE id = '$board_id'";
+    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body FROM boards WHERE id = '$board_id'";
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -54,49 +54,88 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
+
+        //Funktion, som fjerner default action fra et event
         function allowDrop(ev) {
             ev.preventDefault();
         }
             
         function drag(ev) {
+            //Sætter et events datatype til at være text og sætter eventet ev’s data til at være eventets target’s id.
             ev.dataTransfer.setData("text/plain", ev.target.id);
         }
         
         function drop(ev) {
+            //Fjerner default action fra eventet.
             ev.preventDefault();
+
+            //Henter eventets data og gemmer i variablen “data”, samt finder objektet vis id er lig med id’et gemt i variablen “data”.
             var data = ev.dataTransfer.getData("text/plain");
             var object = document.getElementById(data);
+            
+            //Checker om objektet eksistere
             if(object != null){
-                if(object.getAttribute("clone") == "yes"){
+
+                //Checker at objektet ikke er en kopi
+                if(object.getAttribute("clone") == "no"){
+
+                    //Laver en kopi af objektet og gemmer kopien i variablen "clone"
                     var clone = object.cloneNode(true);
+
+                    //Giver kopien et nyt id, bestående af millisekunder siden januar 1, 1970, 00:00:00 UTC  
                     var id = Date.now();
                     clone.setAttribute("id",id);
-                    clone.setAttribute("clone","no");
+
+                    //Sætter kopiens attribute "clone" til "yes" og sætter "class" til "item element"
+                    clone.setAttribute("clone","yes");
                     clone.setAttribute("class","item element");
                     
+                    //Hent target's zIndex og gemmer i variablen "z"
                     var z = parseInt(ev.target.style.zIndex);
+
+                    //Læg 1 til z
                     z = z + 1;
+
+                    //Sæt kopiens zIndex til z
                     clone.style.zIndex = z;
 
+                    //Tilføj kopien til target elementet
                     ev.target.appendChild(clone);
                     
-                }else if (ev.target != document.getElementById(data)){
+                }
+                else if (ev.target != document.getElementById(data)){
+                    
+                    //Hent target's zIndex og gemmer i variablen "z"
                     var z = parseInt(ev.target.style.zIndex);
+                    
+                    //Læg 1 til z
                     z = z + 1;
+
+                    //Sætter elementet med id'et "data"'s zIndex til z
                     document.getElementById(data).style.zIndex = z;
+
+                    //Tilføj elementet med id'et "data" til target elementet
                     ev.target.appendChild(document.getElementById(data));
                 }
             }
+            //Fjerner data fra event
             ev.dataTransfer.clearData();
         }   
 
         function remove(ev) {
+            //Fjerner default action fra eventet.
             ev.preventDefault();
+
+            //Henter eventets data og gemmer i variablen “data”, samt finder objektet vis id er lig med id’et gemt i variablen “data”.
             var data = ev.dataTransfer.getData("text/plain");
             var object = document.getElementById(data);
-            if(object.getAttribute("clone") == "no"){
+            
+            //Checker om elementet er en kopi
+            if(object.getAttribute("clone") == "yes"){
                 object.parentNode.removeChild(object);
             }
+
+            //Fjerner data fra event
             ev.dataTransfer.clearData();
         }
         
@@ -190,21 +229,29 @@
             }
         }
 
-        function back(){
-            update();
-            window.location.href = 'usermanagement/menu.php';
-        }
-
         function update(){
+            //Finder det første element med klassen "grid" og gemmer elementets html i variablen kaldet jsBody
             var jsBody = document.getElementsByClassName('grid')[0].innerHTML;
             
+            //Bruger jQuery's post funktion til at kalde php-filen updateboard.php, med "body" som key og "jsBody" som value 
             $.post('updateboard.php', { body: jsBody }, function(data){
                 //console.log(data);
             });
         }
         
-        function share(){
+        function back(){
+            //Kører update funktionen for at gemme siden
             update();
+
+            //Viderestiller til menu siden
+            window.location.href = 'usermanagement/menu.php';
+        }
+
+        function share(){
+            //Kører update funktionen for at gemme siden
+            update();
+
+            //Viderestiller til delings siden
             window.location.href = 'share.php';
         }
 
@@ -248,7 +295,7 @@
             if($result){
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                        echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="yes" id="'.uniqid().'" style="background-image: '. "url('".$row["img"]."')" .';background-size: contain;"></div>';
+                        echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="no" id="'.uniqid().'" style="background-image: '. "url('".$row["img"]."')" .';background-size: contain;"></div>';
                     }
                 }
             }

@@ -28,12 +28,12 @@
                     
                     //Hent brugernavnets id
                     $share_id = $row['id'];
-
+    
                     //Tilføj bruger til spilleplade
                     $sql = "INSERT INTO boards_users (users_id, boards_id)
                     SELECT * FROM (SELECT '$share_id', '$board_id') AS tmp
                     WHERE NOT EXISTS (
-                        SELECT users_id FROM boards_users WHERE users_id = '$share_id'
+                        SELECT users_id FROM boards_users WHERE users_id = '$share_id' AND boards_id = '$board_id'
                     ) LIMIT 1;";
 
                     $conn->query($sql);
