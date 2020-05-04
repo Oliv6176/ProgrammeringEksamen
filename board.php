@@ -249,7 +249,7 @@
 
         function update(){
             //Finder det første element med klassen "grid" og gemmer elementets html i variablen kaldet jsBody
-            var jsBody = document.getElementsByClassName('grid')[0].innerHTML;
+            var jsBody = document.getElementByClassName('grid').innerHTML;
             
             //Bruger jQuery's post funktion til at kalde php-filen updateboard.php, med "body" som key og "jsBody" som value 
             $.post('updateboard.php', { body: jsBody }, function(data){
