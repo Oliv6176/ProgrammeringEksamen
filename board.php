@@ -139,24 +139,40 @@
             ev.dataTransfer.clearData();
         }
         
+        //Funktion til tilføjelse af spillefelter til toppen 
         function topHandler(side) {
-  
+            
+            //Finder elemtenterne med klassen "row" og gemmer i variablen n
             var n = document.getElementsByClassName('row');
             
+            //For-løkke, som går igennem n's elementer 
             for(i=0; i< n.length; i++){
+                //Checker om der skal tilføjes felter til toppen
                 if(side == 1){
+                    //Laver en kopi af der første "barn" af elementet i "n" med indexet
                     clone = n[i].children[0].cloneNode(true);
+
+                    //Giver kopien et nyt id, bestående af millisekunder siden januar 1, 1970, 00:00:00 UTC  
                     clone.id = Date.now();
+
+                    //Fjerner spil elementer fra kopien ved at sætte html-tekst til ""
                     clone.innerHTML = "";
+
+                    //Indsæt kopien i elementet med indexet "i" i "n", før det første "barn" af elementet med indexet "i" i "n"
                     n[i].insertBefore(clone,n[i].children[0]);
-                }else if (side == -1){
+                }
+                //Checker om der skal fjernes felter fra toppen
+                else if (side == -1){
+                    //Checker om der er mere end en række
                     if(n[i].childElementCount > 1){
+                        //Fjerner n's første "barn"
                         n[i].removeChild(n[i].children[0]);
                     }
                 }
             }
         }
 
+        //Samme koncept som tidligere bare for bunden
         function bottomHandler(side) {
             
             var n = document.getElementsByClassName('row');
@@ -175,6 +191,7 @@
             }
         }
 
+        //Samme koncept som tidligere bare for højreside
         function rightHandler(side) {
             var n = document.getElementsByClassName('grid');
             for(i=0; i< n.length; i++){
@@ -202,6 +219,7 @@
             }
         }
 
+        //Samme koncept som tidligere bare for venstreside
         function leftHandler(side) {
             var n = document.getElementsByClassName('grid');
             for(i=0; i< n.length; i++){
@@ -255,27 +273,37 @@
             window.location.href = 'share.php';
         }
 
+        //jQuery som kører når siden er loadet
         $(document).ready(function() {
+            //Sætter variablen "width" til at være antallet af "børn" i det første element med klassen "grid"
             var width = document.getElementsByClassName('grid')[0].childElementCount;
+            
+            //Bestemmer antallet af kolonner på baggrund af bredden "width"
             var s = "";
             for(i=0;i<width;i++){
                 s = s + "100px "; 
             }
+
+            //Sætter bredden af spillebrættet
             document.getElementsByClassName('grid')[0].style.gridTemplateColumns = s;
             s="";
         
+            //Gør det muligt at flytte spillebrættet, når man holder shift nede
             $(document).keydown(function (e){
                 if(e.keyCode == 16){
                     $( "#draggable" ).draggable();
                 }
                 
             });
+            
+            //Fjern muligheden for at flyte spillebrættet, når man slipper shift
             $(document).keyup(function (e){
                 if(e.keyCode == 16){
                     $( "#draggable" ).draggable("destroy"); 
                 }
             });
 
+            //Gemmer spillebrættet hver 1000. millisekunder
             setInterval(function() {
                 update();
             }, 1000);
@@ -289,16 +317,21 @@
     </div>
     <div class="boardMenu" id="menu">
         <?php
+            //Start databaseforbindelse og hent billeder til Drag and Drop menuen
             $conn = new mysqli('localhost', 'root', '', 'programmering');    
             $query = "SELECT * FROM images";
             $result = $conn->query($query);
+            
+            //Checker om der er mere end ét billede i databasen
             if($result){
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
+                        //Laver en div for hvert af billederne i databasen
                         echo '<div class="item" draggable="true" ondragstart="drag(event)" clone="no" id="'.uniqid().'" style="background-image: '. "url('".$row["img"]."')" .';background-size: contain;"></div>';
                     }
                 }
             }
+            //Lukker databaseforbindelsen
             $conn->close();
         ?>
    </div>  

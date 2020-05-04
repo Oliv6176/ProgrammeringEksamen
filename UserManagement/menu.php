@@ -29,22 +29,28 @@
 			//Check om der er blevet klikket på load-knappen
 			if (isset($_POST['board-load-btn'])) {
 				
-				//Start database forbindelse
+				//Start databaseforbindelse
 				$conn = new mysqli('localhost', 'root', '', 'programmering');
 
 				//Set spillebræts id og bruger id
 				$board_id = mysqli_real_escape_string($conn, $_POST["board-load-btn"]);
 				$user_id = $_SESSION['id'];
 			
-				//He
+				//Henter de spillebræt som brugeren har adgang til
 				$sql = "SELECT * FROM boards_users WHERE users_id ='$user_id'";
 				$result = $conn->query($sql);
 
+				//Checker om der er mere end ét spillebræt i databasen
 				if($result){
 					if ($result->num_rows > 0) {
 						while($row = $result->fetch_assoc()) {
+							//Gemmer id'et for spillebrættet i sessionen
 							$_SESSION['board_id'] = $board_id;
+
+							//Lukker databaseforbindelsen
 							$conn->close();
+
+							//Viderstil til board.php
 							header("location: ../board.php");
 							exit(0);
 						}
