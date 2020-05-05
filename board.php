@@ -28,7 +28,7 @@
             $allowTypes = array('jpg','png','jpeg','gif'); 
 
             if( in_array($fileType, $allowTypes )){
-                $targetFilePath = "../programmering/ProgrammeringEksamen/images/";
+                $targetFilePath = "images/";
 
                 $temp = explode(".", $fileName);
                 $newfilename = uniqid (rand (), true).'.'.end($temp);
