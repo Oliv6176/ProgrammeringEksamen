@@ -1,41 +1,66 @@
 <?php
-	session_start();
+    //Start session
+    session_start();
+    
+    //Check brugeren er logget ind og om der er et board_id
 	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
 		header('location: ../ProgrammeringEksamen/usermanagement/login.php');
     }
+    //Forbinder til databasen
     $conn = new mysqli('localhost', 'root', '', 'programmering');
+    
+    //Henter brugerens id og spillepladens id
     $user_id = $_SESSION['id'];
     $board_id = $_SESSION['board_id'];
 
-    $sql = "SELECT boards.id,boards.name,boards.owner,boards.body FROM boards WHERE id = '$board_id'";
+    //Hent spillepladen fra databasen
+    $sql = "SELECT boards.id,boards.name,boards.body FROM boards WHERE id = '$board_id'";
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
+            
+            //Gemmer body, name og id
             $body = $row["body"];
             $name = $row["name"];
+            $bId = $row["id"];
         }
     }
     else {
+
+        //Viderestil til signout.php, hvis der ikke kan findes et board
         header('location: ../ProgrammeringEksamen/usermanagement/signout.php');
     }
-    
+
+    //lukker forbindelsen til databasen
     $conn->close();
+
+    //Checker om brugeren klikker på "upload"
     if(isset($_POST['submit'])){
+        
+        //Checker om der er valgt en fil
         if(!empty($_FILES["file"]["name"])) { 
+
+            //Gemmer filnavnet og filtypen
             $fileName = basename($_FILES["file"]["name"]); 
             $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
-            echo $fileType;
+           
+            //Godkendte filtyper
             $allowTypes = array('jpg','png','jpeg','gif'); 
 
+            //Checker om den uploadede fil er godkendt
             if( in_array($fileType, $allowTypes )){
                 $targetFilePath = "images/";
 
+                //laver et nyt filnavn
                 $temp = explode(".", $fileName);
                 $newfilename = uniqid (rand (), true).'.'.end($temp);
+
+                //Flyt filen til mappen "images/"
                 if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath . $newfilename)){
 
                     $conn = new mysqli('localhost', 'root', '', 'programmering');
                     
+                    //Uploader "path" til databasen
                     $query = "INSERT INTO images (img) values ('$targetFilePath$newfilename')";
                     $result = $conn->query($query);
                     $conn->close(); 
@@ -337,7 +362,7 @@
    </div>  
     
     <div class="gridMenu">
-        <h1 style="margin:0;margin-left:20px;margin-top:10px;"><?php echo $name ?></h1>
+        <h1 style="margin:0;margin-left:20px;margin-top:10px;"><?php echo $name ?>   id:<?php echo $bId ?></h1>
         <div style="display: flex; justify-content: space-between;">
             <div style="text-align:center;float:left;margin:10px;">
                 <button onclick="topHandler(-1)">-</button>    

@@ -4,7 +4,7 @@
 
     //Send til menu, hvis en bruger er logget ind. 
     if (isset($_SESSION['id'])) {
-        header('location: /UserManagement/menu.php');
+        header('location: UserManagement/menu.php');
     }
 
 ?>
