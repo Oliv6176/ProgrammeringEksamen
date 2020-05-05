@@ -11,5 +11,5 @@
     session_destroy();
 
     //Viderstiller til forsiden
-    header("location: index.php");
+    header("location: ../index.php");
 ?>

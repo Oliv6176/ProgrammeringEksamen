@@ -2,7 +2,7 @@
 	//Start en session til oprettelse af session variabler
     session_start();
 
-    //Send til menuen, hvis en bruger allerede er logget ind. 
+    //Send til login, hvis en bruger ikke er logget ind. 
     if (empty($_SESSION['id'])) {
         header('location: login.php');
     }
