@@ -5,6 +5,7 @@
     //Send til menuen, hvis en bruger allerede er logget ind. 
     if (isset($_SESSION['id'])) {
         header('location: menu.php');
+        exit(0);
     }
 
     //Variable til at gemme brugernavnet i tilfælde af, at koden er forkert. 
@@ -65,17 +66,17 @@
         <div class="box">
             <label>Username</label>
             <br>
-            <input type="text" required="required" name="username" value="<?php echo $username; ?>">
+            <input type="text" required="required" name="username" maxlength="100" value="<?php echo $username; ?>">
         </div>
         <div class="box">
             <label>Password</label>
             <br>
-            <input type="password" required="required" name="password">
+            <input type="password" maxlength="20" required="required" name="password">
         </div>
         <div class="box">
             <label>Password</label>
             <br>
-            <input type="password" required="required" name="passwordConfirm">
+            <input type="password" maxlength="20" required="required" name="passwordConfirm">
         </div>
         
         <button id="signup" type="submit" required="required" name="signup-btn">Sign Up</button>

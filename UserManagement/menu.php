@@ -4,7 +4,8 @@
 
     //Send til login, hvis en bruger ikke er logget ind. 
     if (empty($_SESSION['id'])) {
-        header('location: login.php');
+		header('location: login.php');
+		exit(0);
     }
 ?>
 <!DOCTYPE html>
@@ -133,7 +134,7 @@
 	<div class="column">
 		<h2>New Gameboard</h2>
 		<form action="menu.php" method="post">
-			<input type="text" required="required" name="board-name" placeholder="Board Name">
+			<input type="text" required="required" name="board-name" placeholder="Board Name" maxlength="100">
 			<button id="board-create" type="submit" name="board-create-btn">Create new board</button>
 			<?php
 				//Checker om der bliver klikket på opret-knappen
@@ -158,7 +159,7 @@
 					//Opretter session variabler til spillebræts id
 					$_SESSION['board_id'] = $board_id;
 					
-					//Viderstiller til board.php
+					//Viderestiller til board.php
 					header('location: ../board.php');
 					exit(0);
 				}

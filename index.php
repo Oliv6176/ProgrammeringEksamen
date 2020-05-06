@@ -5,6 +5,7 @@
     //Send til menu, hvis en bruger er logget ind. 
     if (isset($_SESSION['id'])) {
         header('location: UserManagement/menu.php');
+        exit(0);
     }
 
     if (isset($_POST['view-btn'])) {
@@ -14,6 +15,7 @@
 
         //Viderestil til view.php
         header('location: view.php');
+        exit(0);
     }
 ?>
 <html lang="en">

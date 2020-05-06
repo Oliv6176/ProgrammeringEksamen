@@ -5,6 +5,7 @@
     //Send til log ind siden, hvis en bruger ikke er logget ind. 
     if (empty($_SESSION['id'])) {
         header('location: usermanagement/login.php');
+        exit(0);
     }
     //Checker om der pliver lavet en POST med body
     if (isset($_POST["body"])) {
@@ -32,6 +33,7 @@
                 }
             }else{
                 header("location: usermanagement/signout.php");
+                exit(0);
             }
         }
         //Luk databaseforbindelse

@@ -10,6 +10,6 @@
     //Sletter session'en
     session_destroy();
 
-    //Viderstiller til forsiden
+    //Viderestiller til forsiden
     header("location: ../index.php");
 ?>

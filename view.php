@@ -4,6 +4,7 @@
     //Send til index, hvis der ikke er et id. 
     if (empty($_SESSION['view_id'])) {
         header('location: index.php');
+        exit(0);
     }
 
     //Sætter id
@@ -22,6 +23,7 @@
 
         //Viderestil til signout.php, hvis der ikke kan findes et board
         header('location: usermanagement/signout.php');
+        exit(0);
     }
 
 ?>

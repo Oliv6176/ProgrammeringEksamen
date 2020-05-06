@@ -1,11 +1,13 @@
 <?php
     //Start session
     session_start();
-    
+
     //Check brugeren er logget ind og om der er et board_id
-	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
-		header('location: ../ProgrammeringEksamen/usermanagement/login.php');
+    if (empty($_SESSION['id']) or empty($_SESSION['board_id'])) {
+        header('location: usermanagement/login.php');
+        exit(0);
     }
+
     //Forbinder til databasen
     $conn = new mysqli('localhost', 'root', '', 'programmering');
     
@@ -28,7 +30,8 @@
     else {
 
         //Viderestil til signout.php, hvis der ikke kan findes et board
-        header('location: ../usermanagement/signout.php');
+        header('location: ..usermanagement/signout.php');
+        exit(0);
     }
 
     //lukker forbindelsen til databasen

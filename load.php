@@ -5,6 +5,7 @@
     //Send til index.php, hvis der ikke er et id.
     if (empty($_SESSION['view_id'])) {
         header('location: index.php');
+        exit(0);
     }
 
     //Starter database forbindelse

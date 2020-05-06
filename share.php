@@ -4,7 +4,8 @@
 
     //Send til log ind siden, hvis brugeren ikke er logget ind eller der ikke er et brætspils id
 	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
-		header('location: usermanagement/login.php');
+        header('location: usermanagement/login.php');
+        exit(0);
     }
 
     //Checker om brugeren har klikket på del knappen
@@ -59,6 +60,7 @@
 			exit(0);
 
         }
+
     }
 ?>
 <!DOCTYPE html>
@@ -76,7 +78,7 @@
     <form action="share.php" method="post" class="share">
         <div class="box">
             <label>Username to share with</label>
-            <input type="text" required="required" name="username" value="">
+            <input type="text" required="required" name="username" maxlength="100" value="">
         </div>
         <button id="share" type="submit" name="share-btn">Share</button>
     </form>
