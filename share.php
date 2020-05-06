@@ -4,7 +4,7 @@
 
     //Send til log ind siden, hvis brugeren ikke er logget ind eller der ikke er et brætspils id
 	if (empty($_SESSION['id']) OR empty($_SESSION['board_id'])) {
-		header('location: ../ProgrammeringEksamen/usermanagement/login.php');
+		header('location: usermanagement/login.php');
     }
 
     //Checker om brugeren har klikket på del knappen
