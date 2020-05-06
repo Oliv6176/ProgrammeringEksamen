@@ -28,7 +28,7 @@
     else {
 
         //Viderestil til signout.php, hvis der ikke kan findes et board
-        header('location: ../ProgrammeringEksamen/usermanagement/signout.php');
+        header('location: ../usermanagement/signout.php');
     }
 
     //lukker forbindelsen til databasen
@@ -388,7 +388,7 @@
     </div>
 
     <div class="gridbox">
-        <div class="grid" style="display: grid;grid-template-columns: 100px;" id="draggable">
+        <div class="grid" style="width:auto;display: grid;grid-template-columns: 100px;" id="draggable">
             <?php echo $body;?>
         </div>
     </div>
