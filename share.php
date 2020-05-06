@@ -53,6 +53,11 @@
         }else{
             //Luk databaseforbindelse
             $conn->close();
+
+            //Viderestil til signout.php
+            header('location: usermanagement/signout.php');
+			exit(0);
+
         }
     }
 ?>
@@ -65,6 +70,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="topnav">
+		<a href="board.php">Back</a>
+	</div>
     <form action="share.php" method="post" class="share">
         <div class="box">
             <label>Username to share with</label>
