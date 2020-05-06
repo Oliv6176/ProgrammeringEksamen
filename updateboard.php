@@ -29,7 +29,10 @@
                     //Updater spillepladen i databasen, hvor id'et er spillepladens id.
                     $sql = "UPDATE boards SET body = '$body' WHERE id='$id'";
                     $conn->query($sql);
-                    exit();
+
+                    //Luk databaseforbindelse
+                    $conn->close();
+                    exit(0);
                 }
             }else{
                 header("location: usermanagement/signout.php");
@@ -38,5 +41,9 @@
         }
         //Luk databaseforbindelse
         $conn->close();
+    }else{
+        //Viderestiller til signout.php
+        header('location: usermanagement/signout.php');
+        exit(0);
     }
 ?>
